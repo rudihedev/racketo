@@ -1,11 +1,14 @@
-To install dependencies:
-```sh
-bun install
-```
+## API Documentation
 
-To run:
-```sh
-bun run dev
-```
+- Local: `http://localhost: 3000`
+- Production: `https://racketo.rudihe.com`
 
-open http://localhost:3000
+| Endpoint          | HTTP     | Description       | Available |
+| ----------------- | -------- | ----------------- | --------- |
+| `/rackets`        | `GET`    | Get all items     | ✅        |
+| `/rackets/{slug}` | `GET`    | Get item by id    | ✅        |
+| `/rackets`        | `POST`   | Add new item      |           |
+| `/rackets`        | `DELETE` | Delete all items  |           |
+| `/rackets/{id}`   | `DELETE` | Delete item by id |           |
+| `/rackets/{id}`   | `PATCH`  | Patch item by id  |           |
+| `/rackets/{id}`   | `PUT`    | Update item by id |           |
