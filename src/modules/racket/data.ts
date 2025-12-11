@@ -1,5 +1,6 @@
 type Racket = {
   id: number;
+  brand: string;
   name: string;
   slug: string;
   weight: "2U" | "3U" | "4U" | "5U";
@@ -12,6 +13,7 @@ type Rackets = Racket[];
 export const dataRackets: Rackets = [
   {
     id: 1,
+    brand: "Yonex",
     name: "Astrox 100 ZZ",
     slug: "astrox",
     weight: "3U",
@@ -20,6 +22,7 @@ export const dataRackets: Rackets = [
   },
   {
     id: 2,
+    brand: "Victor",
     name: "Thruster Ryuga II",
     slug: "thruster",
     weight: "4U",
@@ -28,6 +31,7 @@ export const dataRackets: Rackets = [
   },
   {
     id: 3,
+    brand: "Li-Ning",
     name: "BladeX 900",
     slug: "bladex",
     weight: "2U",
@@ -36,6 +40,7 @@ export const dataRackets: Rackets = [
   },
   {
     id: 4,
+    brand: "Hundred",
     name: "Nitrix Volta 70",
     slug: "nitrix",
     weight: "5U",
@@ -44,6 +49,7 @@ export const dataRackets: Rackets = [
   },
   {
     id: 5,
+    brand: "Apacs",
     name: "Ziggler LHI Pro III",
     slug: "ziggler",
     weight: "3U",
@@ -52,9 +58,19 @@ export const dataRackets: Rackets = [
   },
   {
     id: 6,
+    brand: "Yonex",
     name: "Voltage Z-Force II LCW Limited",
     slug: "voltage",
     weight: "3U",
+    createdAt: new Date(),
+    updatedAt: new Date(),
+  },
+  {
+    id: 7,
+    brand: "Felet",
+    name: "Woven 1000",
+    slug: "woven",
+    weight: "4U",
     createdAt: new Date(),
     updatedAt: new Date(),
   },
