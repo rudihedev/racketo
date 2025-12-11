@@ -1,6 +1,10 @@
+## Racketo API
+
+List of badminton rackets API
+
 ## API Documentation
 
-- Local: `http://localhost: 3000`
+- Local: `http://localhost:3000`
 - Production: `https://racketo.rudihe.com`
 
 | Endpoint          | HTTP     | Description       | Available |
