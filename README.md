@@ -6,7 +6,7 @@
 | Endpoint          | HTTP     | Description       | Available |
 | ----------------- | -------- | ----------------- | --------- |
 | `/rackets`        | `GET`    | Get all items     | ✅        |
-| `/rackets/{slug}` | `GET`    | Get item by id    | ✅        |
+| `/rackets/{slug}` | `GET`    | Get item by slug  | ✅        |
 | `/rackets`        | `POST`   | Add new item      |           |
 | `/rackets`        | `DELETE` | Delete all items  |           |
 | `/rackets/{id}`   | `DELETE` | Delete item by id |           |
