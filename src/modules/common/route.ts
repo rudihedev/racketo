@@ -4,7 +4,7 @@ export const commonRoute = new Hono();
 
 commonRoute.get("/", (c) => {
   return c.json({
-    title: "Racket API",
+    title: "Racketo API",
     racket: "/rackets",
   });
 });

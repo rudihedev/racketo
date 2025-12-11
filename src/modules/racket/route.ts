@@ -10,11 +10,11 @@ racketRoute.get("/", (c) => {
 racketRoute.get("/:slug", (c) => {
   const slug = c.req.param("slug");
 
-  const foundRacket = dataRackets.find((racket) => racket.slug == slug);
+  const racket = dataRackets.find((racket) => racket.slug == slug);
 
-  if (!foundRacket) {
+  if (!racket) {
     return c.notFound();
   }
 
-  return c.json(foundRacket);
+  return c.json(racket);
 });
