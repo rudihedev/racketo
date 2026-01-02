@@ -11,7 +11,6 @@ services:
     image: postgres:alpine
     ports:
       - "5432:5432"
-    environment:
-      POSTGRES_USER: racketo_user
-      POSTGRES_PASSWORD: racketo_password
-      POSTGRES_DB: racketo_database
+    env_file:
+      - path: .env
+        required: true
