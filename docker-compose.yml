@@ -1,0 +1,17 @@
+services:
+  backend:
+    image: racketo # Remember to change the image name
+    build:
+      context: .
+    ports:
+      - "3000:3000"
+    depends_on:
+      - database
+  database:
+    image: postgres:alpine
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: racketo_user
+      POSTGRES_PASSWORD: racketo_password
+      POSTGRES_DB: racketo_database
