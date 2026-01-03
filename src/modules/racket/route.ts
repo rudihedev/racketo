@@ -3,10 +3,12 @@ import { dataRackets } from "./data";
 
 export const racketRoute = new Hono();
 
+// GET list of all rackets
 racketRoute.get("/", (c) => {
   return c.json(dataRackets);
 });
 
+// GET a racket by slug
 racketRoute.get("/:slug", (c) => {
   const slug = c.req.param("slug");
 
@@ -19,6 +21,7 @@ racketRoute.get("/:slug", (c) => {
   return c.json(foundRacket);
 });
 
+// ADD new racket data
 racketRoute.post("/", async (c) => {
   try {
     const body = await c.req.json();
@@ -53,26 +56,7 @@ racketRoute.post("/", async (c) => {
   }
 });
 
-racketRoute.delete("/:slug", (c) => {
-  const slug = c.req.param("slug");
-
-  const racketIndex = dataRackets.findIndex((racket) => racket.slug === slug);
-
-  if (racketIndex === -1) {
-    return c.json({ error: "Racket is not found!" }, 404);
-  }
-
-  const deletedRacket = dataRackets.splice(racketIndex, 1)[0];
-
-  return c.json(
-    {
-      message: "Racket deletec successfully!",
-      data: deletedRacket,
-    },
-    200
-  );
-});
-
+// UPDATE by slug
 racketRoute.put("/:slug", async (c) => {
   const slug = c.req.param("slug");
   const body = await c.req.json();
@@ -115,4 +99,52 @@ racketRoute.put("/:slug", async (c) => {
   const updatedRacket = dataRackets.find((r) => r.slug === slug);
 
   return c.json(updatedRacket, 200);
+});
+
+// DELETE a racket by slug
+racketRoute.delete("/:slug", (c) => {
+  const slug = c.req.param("slug");
+
+  const racketIndex = dataRackets.findIndex((racket) => racket.slug === slug);
+
+  if (racketIndex === -1) {
+    return c.json({ error: "Racket is not found!" }, 404);
+  }
+
+  const deletedRacket = dataRackets.splice(racketIndex, 1)[0];
+
+  return c.json(
+    {
+      message: "Racket deletec successfully!",
+      data: deletedRacket,
+    },
+    200
+  );
+});
+
+// DELETE ALL
+racketRoute.delete("/", (c) => {
+  const confirmHeader = c.req.header("X-Confirm-Delete-All");
+
+  if (confirmHeader !== "I-UNDERSTAND-THIS-WILL-DELETE-ALL") {
+    return c.json(
+      {
+        error: "Missing or invalid confirmation header",
+        required: "X-Confirm-Delete-All: I-UNDERSTAND-THIS-WILL-DELETE-ALL",
+      },
+      400
+    );
+  }
+
+  const totalDeleted = dataRackets.length;
+
+  dataRackets.splice(0, dataRackets.length);
+
+  return c.json(
+    {
+      message: "All rackets deleted successfully!",
+      totalDeleted: totalDeleted,
+    },
+    200
+  );
 });
