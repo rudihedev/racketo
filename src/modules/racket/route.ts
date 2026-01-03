@@ -25,13 +25,13 @@ racketRoute.post("/", async (c) => {
 
     // Check for validation
     if (!body.slug || !body.name) {
-      return c.json({ error: "slug dan name wajib diisi" }, 400);
+      return c.json({ error: "slug and name are compulsory!" }, 400);
     }
 
     // Duplication checking
     const exists = dataRackets.find((racket) => racket.slug === body.slug);
     if (exists) {
-      return c.json({ error: "Racket dengan slug ini sudah ada" }, 409);
+      return c.json({ error: "This racket is already exist!" }, 409);
     }
 
     // Add new racket
@@ -49,7 +49,7 @@ racketRoute.post("/", async (c) => {
 
     return c.json(newRacket, 201);
   } catch (error) {
-    return c.json({ error: "Invalid JSON-ku" }, 400);
+    return c.json({ error: "Invalid JSON" }, 400);
   }
 });
 
@@ -59,14 +59,14 @@ racketRoute.delete("/:slug", (c) => {
   const racketIndex = dataRackets.findIndex((racket) => racket.slug === slug);
 
   if (racketIndex === -1) {
-    return c.json({ error: "Racket tidak ditemukan" }, 404);
+    return c.json({ error: "Racket is not found!" }, 404);
   }
 
   const deletedRacket = dataRackets.splice(racketIndex, 1)[0];
 
   return c.json(
     {
-      message: "Racket berhasil dihapus",
+      message: "Racket deletec successfully!",
       data: deletedRacket,
     },
     200
