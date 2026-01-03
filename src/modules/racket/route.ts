@@ -52,3 +52,23 @@ racketRoute.post("/", async (c) => {
     return c.json({ error: "Invalid JSON-ku" }, 400);
   }
 });
+
+racketRoute.delete("/:slug", (c) => {
+  const slug = c.req.param("slug");
+
+  const racketIndex = dataRackets.findIndex((racket) => racket.slug === slug);
+
+  if (racketIndex === -1) {
+    return c.json({ error: "Racket tidak ditemukan" }, 404);
+  }
+
+  const deletedRacket = dataRackets.splice(racketIndex, 1)[0];
+
+  return c.json(
+    {
+      message: "Racket berhasil dihapus",
+      data: deletedRacket,
+    },
+    200
+  );
+});
