@@ -1,18 +1,21 @@
 import { Hono } from "hono";
 import { dataRackets } from "./data";
+import { Rackets, RacketSchema } from "./schema";
+
+let rackets: Rackets = dataRackets;
 
 export const racketRoute = new Hono();
 
 // GET list of all rackets
 racketRoute.get("/", (c) => {
-  return c.json(dataRackets);
+  return c.json(rackets);
 });
 
 // GET a racket by slug
 racketRoute.get("/:slug", (c) => {
   const slug = c.req.param("slug");
 
-  const foundRacket = dataRackets.find((racket) => racket.slug == slug);
+  const foundRacket = rackets.find((racket) => racket.slug == slug);
 
   if (!foundRacket) {
     return c.notFound();
@@ -32,14 +35,14 @@ racketRoute.post("/", async (c) => {
     }
 
     // Duplication checking
-    const exists = dataRackets.find((racket) => racket.slug === body.slug);
+    const exists = rackets.find((racket) => racket.slug === body.slug);
     if (exists) {
       return c.json({ error: "This racket is already exist!" }, 409);
     }
 
     // Add new racket
     const newRacket = {
-      id: dataRackets.length + 1,
+      id: rackets.length + 1,
       brand: body.brand,
       name: body.name,
       slug: body.slug,
@@ -48,7 +51,7 @@ racketRoute.post("/", async (c) => {
       updatedAt: new Date(),
     };
 
-    dataRackets.push(newRacket);
+    rackets.push(newRacket);
 
     return c.json(newRacket, 201);
   } catch (error) {
@@ -57,26 +60,28 @@ racketRoute.post("/", async (c) => {
 });
 
 //--- UPDATE by slug
-racketRoute.put("/:slug", async (c) => {
-  const slug = c.req.param("slug");
+racketRoute.put("/:id", async (c) => {
+  const id = Number(c.req.param("id"));
   const body = await c.req.json();
 
+  // TODO: const validatedBody = RacketSchema.parse(body);
   // Basic validation
   if (!body.name || !body.brand || !body.weight) {
     return c.json({ error: "name, brand, and weight are compulsory!" }, 400);
   }
-
   // Weight validation
   if (!["2U", "3U", "4U", "5U"].includes(body.weight)) {
     return c.json({ error: "weight must be: 2U, 3U, 4U, or 5U" }, 400);
   }
 
-  let found = false;
+  const foundRacket = dataRackets.find((racket) => racket.id === id);
 
-  // Update with .map()
-  const updatedRackets = dataRackets.map((racket) => {
-    if (racket.slug === slug) {
-      found = true;
+  if (!foundRacket) {
+    return c.json({ error: "Racket is not found!" }, 404);
+  }
+
+  rackets = dataRackets.map((racket) => {
+    if (racket.id === id) {
       return {
         ...racket,
         name: body.name,
@@ -88,23 +93,13 @@ racketRoute.put("/:slug", async (c) => {
     return racket;
   });
 
-  if (!found) {
-    return c.json({ error: "Racket is not found!" }, 404);
-  }
-
-  // Replace array
-  dataRackets.splice(0, dataRackets.length, ...updatedRackets);
-
-  // Return updated racket
-  const updatedRacket = dataRackets.find((r) => r.slug === slug);
-
-  return c.json(updatedRacket, 200);
+  return c.json({ message: "Racket updated successfully" }, 200);
 });
 
 //--- PATCH - Partial update racket by slug
-racketRoute.patch("/:slug", async (c) => {
+racketRoute.patch("/:id", async (c) => {
   try {
-    const slug = c.req.param("slug");
+    const id = Number(c.req.param("id"));
     const body = await c.req.json();
 
     // Validasi weight jika ada
@@ -112,7 +107,7 @@ racketRoute.patch("/:slug", async (c) => {
       return c.json({ error: "weight must be: 2U, 3U, 4U, or 5U" }, 400);
     }
 
-    const racketIndex = dataRackets.findIndex((r) => r.slug === slug);
+    const racketIndex = rackets.findIndex((r) => r.id === id);
 
     if (racketIndex === -1) {
       return c.json({ error: "Racket is not found!" }, 404);
@@ -161,27 +156,19 @@ racketRoute.delete("/:slug", (c) => {
 
 //--- DELETE ALL
 racketRoute.delete("/", (c) => {
-  const confirmHeader = c.req.header("X-Confirm-Delete-All");
+  const headerConfirmDeleteAll = c.req.header("X-Confirm-Delete-All");
 
-  if (confirmHeader !== "I-UNDERSTAND-THIS-WILL-DELETE-ALL") {
+  if (headerConfirmDeleteAll !== process.env.ADMIN_API_KEY) {
     return c.json(
       {
-        error: "Missing or invalid confirmation header",
-        required: "X-Confirm-Delete-All: I-UNDERSTAND-THIS-WILL-DELETE-ALL",
+        error: "Invalid Admin API Key",
+        required: `X-Confirm-Delete-All: ${process.env.ADMIN_API_KEY}`,
       },
-      400
+      403
     );
   }
 
-  const totalDeleted = dataRackets.length;
+  rackets = [];
 
-  dataRackets.splice(0, dataRackets.length);
-
-  return c.json(
-    {
-      message: "All rackets deleted successfully!",
-      totalDeleted: totalDeleted,
-    },
-    200
-  );
+  return c.json({ message: "All rackets deleted successfully!" }, 200);
 });

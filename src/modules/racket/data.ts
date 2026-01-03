@@ -1,14 +1,4 @@
-type Racket = {
-  id: number;
-  brand: string;
-  name: string;
-  slug: string;
-  weight: "2U" | "3U" | "4U" | "5U";
-  createdAt: Date;
-  updatedAt: Date;
-};
-
-type Rackets = Racket[];
+import { Rackets } from "./schema";
 
 export const dataRackets: Rackets = [
   {
