@@ -14,5 +14,5 @@ List of badminton rackets API
 | `/rackets`        | `POST`   | Add new item      | ✅        |
 | `/rackets`        | `DELETE` | Delete all items  | ✅        |
 | `/rackets/{slug}` | `DELETE` | Delete item by id | ✅        |
-| `/rackets/{slug}` | `PATCH`  | Patch item by id  |           |
+| `/rackets/{slug}` | `PATCH`  | Patch item by id  | ✅        |
 | `/rackets/{slug}` | `PUT`    | Update item by id | ✅        |
