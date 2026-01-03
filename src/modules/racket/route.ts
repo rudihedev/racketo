@@ -56,7 +56,7 @@ racketRoute.post("/", async (c) => {
   }
 });
 
-// UPDATE by slug
+//--- UPDATE by slug
 racketRoute.put("/:slug", async (c) => {
   const slug = c.req.param("slug");
   const body = await c.req.json();
@@ -101,7 +101,44 @@ racketRoute.put("/:slug", async (c) => {
   return c.json(updatedRacket, 200);
 });
 
-// DELETE a racket by slug
+//--- PATCH - Partial update racket by slug
+racketRoute.patch("/:slug", async (c) => {
+  try {
+    const slug = c.req.param("slug");
+    const body = await c.req.json();
+
+    // Validasi weight jika ada
+    if (body.weight && !["2U", "3U", "4U", "5U"].includes(body.weight)) {
+      return c.json({ error: "weight must be: 2U, 3U, 4U, or 5U" }, 400);
+    }
+
+    const racketIndex = dataRackets.findIndex((r) => r.slug === slug);
+
+    if (racketIndex === -1) {
+      return c.json({ error: "Racket is not found!" }, 404);
+    }
+
+    // Build updated object dengan explicit assignment
+    const currentRacket = dataRackets[racketIndex];
+
+    dataRackets[racketIndex] = {
+      id: currentRacket.id,
+      brand: body.brand !== undefined ? body.brand : currentRacket.brand,
+      name: body.name !== undefined ? body.name : currentRacket.name,
+      slug: currentRacket.slug,
+      weight: body.weight !== undefined ? body.weight : currentRacket.weight, // ← Explicit
+      createdAt: currentRacket.createdAt,
+      updatedAt: new Date(),
+    };
+
+    return c.json(dataRackets[racketIndex], 200);
+  } catch (error) {
+    console.error("Patch error:", error);
+    return c.json({ error: "Invalid JSON" }, 400);
+  }
+});
+
+//--- DELETE a racket by slug
 racketRoute.delete("/:slug", (c) => {
   const slug = c.req.param("slug");
 
@@ -122,7 +159,7 @@ racketRoute.delete("/:slug", (c) => {
   );
 });
 
-// DELETE ALL
+//--- DELETE ALL
 racketRoute.delete("/", (c) => {
   const confirmHeader = c.req.header("X-Confirm-Delete-All");
 
