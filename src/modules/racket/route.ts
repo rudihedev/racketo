@@ -72,3 +72,47 @@ racketRoute.delete("/:slug", (c) => {
     200
   );
 });
+
+racketRoute.put("/:slug", async (c) => {
+  const slug = c.req.param("slug");
+  const body = await c.req.json();
+
+  // Basic validation
+  if (!body.name || !body.brand || !body.weight) {
+    return c.json({ error: "name, brand, and weight are compulsory!" }, 400);
+  }
+
+  // Weight validation
+  if (!["2U", "3U", "4U", "5U"].includes(body.weight)) {
+    return c.json({ error: "weight must be: 2U, 3U, 4U, or 5U" }, 400);
+  }
+
+  let found = false;
+
+  // Update with .map()
+  const updatedRackets = dataRackets.map((racket) => {
+    if (racket.slug === slug) {
+      found = true;
+      return {
+        ...racket,
+        name: body.name,
+        brand: body.brand,
+        weight: body.weight,
+        updatedAt: new Date(),
+      };
+    }
+    return racket;
+  });
+
+  if (!found) {
+    return c.json({ error: "Racket is not found!" }, 404);
+  }
+
+  // Replace array
+  dataRackets.splice(0, dataRackets.length, ...updatedRackets);
+
+  // Return updated racket
+  const updatedRacket = dataRackets.find((r) => r.slug === slug);
+
+  return c.json(updatedRacket, 200);
+});
