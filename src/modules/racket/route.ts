@@ -36,14 +36,19 @@ racketRoute.post("/", async (c) => {
 
     // Add new racket
     const newRacket = {
-      id: dataRackets.length + 1, // atau generate ID yang lebih robust
-      ...body,
+      id: dataRackets.length + 1,
+      brand: body.brand,
+      name: body.name,
+      slug: body.slug,
+      weight: body.weight,
+      createdAt: new Date(),
+      updatedAt: new Date(),
     };
 
     dataRackets.push(newRacket);
 
     return c.json(newRacket, 201);
   } catch (error) {
-    return c.json({ error: "Invalid JSON" }, 400);
+    return c.json({ error: "Invalid JSON-ku" }, 400);
   }
 });
