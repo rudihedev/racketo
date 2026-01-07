@@ -158,9 +158,9 @@ racketRoute.delete("/:slug", (c) => {
 
 //--- DELETE ALL
 racketRoute.delete("/", (c) => {
-  const confirmHeader = c.req.header("X-Confirm-Delete-All");
+  const headerConfirmDeleteAll = c.req.header("X-Confirm-Delete-All");
 
-  if (confirmHeader !== process.env.ADMIN_API_KEY) {
+  if (headerConfirmDeleteAll !== process.env.ADMIN_API_KEY) {
     return c.json(
       {
         error: "Invalid Admin API KEY",
@@ -170,15 +170,7 @@ racketRoute.delete("/", (c) => {
     );
   }
 
-  const totalDeleted = dataRackets.length;
+  rackets = [];
 
-  dataRackets.splice(0, dataRackets.length);
-
-  return c.json(
-    {
-      message: "All rackets deleted successfully!",
-      totalDeleted: totalDeleted,
-    },
-    200
-  );
+  return c.json({ message: "All rackets deleted successfully!" }, 200);
 });
