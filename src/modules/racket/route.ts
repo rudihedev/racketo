@@ -15,7 +15,7 @@ racketRoute.get("/", (c) => {
 racketRoute.get("/:slug", (c) => {
   const slug = c.req.param("slug");
 
-  const foundRacket = dataRackets.find((racket) => racket.slug == slug);
+  const foundRacket = rackets.find((racket) => racket.slug == slug);
 
   if (!foundRacket) {
     return c.notFound();
