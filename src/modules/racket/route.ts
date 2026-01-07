@@ -1,5 +1,8 @@
 import { Hono } from "hono";
 import { dataRackets } from "./data";
+import { Rackets, RacketSchema } from "./schema";
+
+let rackets: Rackets = dataRackets;
 
 export const racketRoute = new Hono();
 
