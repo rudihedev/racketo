@@ -15,10 +15,12 @@ datasource db {
 
 model Racket {
   id Int @id @default(autoincrement())
-  brand String @db.VarChar(300)
-  name String
-  slug String @unique
+
+  brand  String @db.VarChar(300)
+  name   String
+  slug   String @unique
   weight String
+
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now()) @updatedAt
 }
