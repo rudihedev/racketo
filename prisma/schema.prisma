@@ -18,7 +18,7 @@ model Racket {
   brand String @db.VarChar(300)
   name String
   slug String @unique
-  weight Int
+  weight String
   createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  updatedAt DateTime @default(now()) @updatedAt
 }
