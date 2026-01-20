@@ -4,15 +4,15 @@
   "scripts": {
     "dev": "bun run --hot src/index.ts",
     "start": "bun run src/index.ts",
-    "build": "bun install && bun db:gen",
-    "db:up": "docker compose up -d",
-    "db:down": "docker compose down",
-    "db:migrate": "prisma migrate dev",
-    "db:migrate:deploy": "prisma migrate deploy",
     "db:gen": "prisma generate",
+    "db:migrate:deploy": "prisma migrate deploy",
     "db:seed": "prisma db seed",
     "db:studio": "prisma studio --browser none",
-    "db:reset": "prisma migrate reset"
+    "build": "bun install && bun db:gen",
+    "db:migrate": "prisma migrate dev",
+    "db:reset": "prisma migrate reset",
+    "db:up": "docker compose up -d",
+    "db:down": "docker compose down"
   },
   "dependencies": {
     "@prisma/adapter-pg": "^7.2.0",
