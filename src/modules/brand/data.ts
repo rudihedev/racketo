@@ -1,17 +1,12 @@
-import { SeedRacket } from "./schema";
+import { SeedBrand } from "./schema";
 
-export const dataRackets: SeedRacket[] = [
+export const dataBrands: SeedBrand[] = [
   {
-    brandSlug: "Yonex",
-    name: "Astrox 100 ZZ",
-    slug: "astrox-100-zz",
-    weight: "3U",
+    slug: "yonex",
+    name: "Yonex",
   },
   {
     brandSlug: "Victor",
-    name: "Thruster Ryuga II",
-    slug: "thruster-ryuga-ii",
-    weight: "4U",
   },
   {
     brandSlug: "Li-Ning",

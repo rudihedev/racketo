@@ -16,11 +16,25 @@ datasource db {
 model Racket {
   id Int @id @default(autoincrement())
 
-  brand String @db.VarChar(300)
+  name   String
+  slug   String @unique
+  weight String
+
+  brand   Brand? @relation(fields: [brandId], references: [id])
+  brandId Int?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now()) @updatedAt
+}
+
+model Brand {
+  id Int @id @default(autoincrement())
+
   name String
   slug String @unique
-  weight String
-  
+
+  rackets Racket[]
+
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now()) @updatedAt
 }

@@ -10,6 +10,4 @@ app.use(logger());
 app.route("/", commonRoute);
 app.route("/rackets", racketRoute);
 
-console.log(process.env);
-
 export default app;

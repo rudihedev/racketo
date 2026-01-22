@@ -1,7 +1,9 @@
 import { Hono } from "hono";
 import { dataRackets } from "./data";
-import { Rackets, RacketSchema } from "./schema";
+import { CreateRacket, Rackets, RacketSchema } from "./schema";
 import { prisma } from "../../lib/prisma";
+import slugify from "slugify";
+import { createRacketSlug } from "./util";
 
 export const racketRoute = new Hono();
 
@@ -24,7 +26,24 @@ racketRoute.get("/:slug", async (c) => {
 
 // ADD new racket data
 racketRoute.post("/", async (c) => {
-  return c.json({}, 201);
+  try {
+    const body: CreateRacket = await c.req.json();
+
+    const createdRacket = await prisma.racket.create({
+      data: {
+        ...body,
+        slug: createRacketSlug(body),
+      },
+    });
+
+    return c.json(createdRacket, 201);
+  } catch (error) {
+    console.error(error);
+    return c.json({
+      message: "Failed to create racket",
+      error,
+    });
+  }
 });
 
 //--- PATCH - Partial update racket by slug
