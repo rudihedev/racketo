@@ -12,8 +12,12 @@ racketRoute.get("/", async (c) => {
 });
 
 // GET a racket by slug
-racketRoute.get("/:slug", (c) => {
+racketRoute.get("/:slug", async (c) => {
   const slug = c.req.param("slug");
+
+  const racket = await prisma.racket.findUnique({
+    where: { slug },
+  });
 
   return c.json({});
 });
