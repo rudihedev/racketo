@@ -18,7 +18,7 @@ racketRoute.get("/:slug", async (c) => {
   const racket = await prisma.racket.findUnique({
     where: { slug },
   });
-  console.log(slug);
+  console.log("slug:", slug);
   return c.json({});
 });
 
